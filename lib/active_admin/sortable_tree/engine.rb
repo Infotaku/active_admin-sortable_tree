@@ -1,4 +1,4 @@
-require "activeadmin"
+# frozen_string_literal: true
 
 module ActiveAdmin
   module SortableTree
@@ -14,6 +14,16 @@ module ActiveAdmin
             "active_admin/sortable.css",
             "active_admin/sortable.js"
           ]
+        end
+      end
+
+      initializer "active_admin-sortable_tree.importmap", after: "importmap" do |app|
+        next unless app.config.respond_to?(:importmap)
+
+        ActiveAdmin.importmap.draw(Engine.root.join("config", "importmap.rb"))
+        js_path = Engine.root.join("app/javascript")
+        if app.config.respond_to?(:assets)
+          app.config.assets.paths << js_path
         end
       end
 

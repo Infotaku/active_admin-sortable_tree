@@ -1,10 +1,16 @@
-module ActiveAdmin::SortableTree
-  class Compatibility
-    def self.normalized_resource_name(resource_name)
-      if Rails::VERSION::MAJOR >= 5
-        resource_name.to_s.underscore.parameterize(separator: "_".freeze)
-      else
-        resource_name.to_s.underscore.parameterize("_".freeze)
+# frozen_string_literal: true
+
+module ActiveAdmin
+  module SortableTree
+    class Compatibility
+      def self.normalized_resource_name(resource_name)
+        resource_name = resource_name.to_s
+
+        if Rails::VERSION::MAJOR >= 5
+          resource_name.underscore.parameterize(separator: "_")
+        else
+          resource_name.underscore.parameterize("_")
+        end
       end
     end
   end
