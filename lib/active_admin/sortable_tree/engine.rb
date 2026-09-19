@@ -9,15 +9,22 @@ module ActiveAdmin
       config.aa_sortable_tree.register_assets = true
 
       initializer "active_admin-sortable_tree.precompile", group: :all do |app|
-        app.config.assets.precompile += [
-          "active_admin/sortable.css",
-          "active_admin/sortable.js"
-        ]
+        if app.config.respond_to?(:assets)
+          app.config.assets.precompile += [
+            "active_admin/sortable.css",
+            "active_admin/sortable.js"
+          ]
+        end
       end
 
       initializer "active_admin-sortable_tree.register_assets" do
-        if config.aa_sortable_tree.register_assets
+        next unless config.aa_sortable_tree.register_assets
+
+        if ActiveAdmin.application.respond_to?(:register_stylesheet)
           ActiveAdmin.application.register_stylesheet "active_admin/sortable.css"
+        end
+
+        if ActiveAdmin.application.respond_to?(:register_javascript)
           ActiveAdmin.application.register_javascript "active_admin/sortable.js"
         end
       end
